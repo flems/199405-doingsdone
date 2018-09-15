@@ -40,7 +40,17 @@ $tastk_list = [
         'category' => 'Домашние дела',
         'status' => 'Нет',
     ],
-]
+];
+
+function countTask ($task_list, $project_name) {
+    $count = 0;
+    foreach ($task_list as $key => $task) {
+        if($task['category'] === $project_name) {
+            $count++;
+        }
+    }
+    return $count;
+}
 ?>
 <!DOCTYPE html>
 <html lang="ru">
@@ -89,7 +99,7 @@ $tastk_list = [
                         <?php foreach ($project_list as $key => $project):?>
                             <li class="main-navigation__list-item">
                                 <a class="main-navigation__list-item-link" href="#"><?=$project?></a>
-                                <span class="main-navigation__list-item-count">0</span>
+                                <span class="main-navigation__list-item-count"><?=countTask($tastk_list, $project)?></span>
                             </li>
                         <?php endforeach;?>
                     </ul>
