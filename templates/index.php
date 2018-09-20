@@ -21,4 +21,4 @@
   </label>
 </div>
 
-<?=include_template('table_task.php', ['task_list' => $task_list])?>
+<?=include_template('table_task.php', ['task_list' => $task_list, 'show_complete_tasks' => $show_complete_tasks])?>
