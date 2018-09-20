@@ -13,11 +13,8 @@ function include_template($name, $data)
   require_once $name;
 
   $result = ob_get_clean();
-
-  // print_r($result);
   return $result;
 }
-
 
 function countTask($task_list, $project_name)
 {
@@ -28,4 +25,21 @@ function countTask($task_list, $project_name)
     }
   }
   return $count;
+}
+
+function checkDates($date)
+{
+  $result = false;
+  $secs_in_day = 24 * 60 * 60;
+  $current_time = strtotime('now');
+  $execute_date = strtotime($date);
+  $time_before = $execute_date - $current_time;
+
+  if ($execute_date) {
+    $time_before <= $secs_in_day ? $result = true : $result = false;
+  } else {
+    $result = false;
+  }
+
+  return $result;
 }

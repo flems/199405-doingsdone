@@ -1,21 +1,22 @@
 <?php
+$show_complete_tasks = rand(0, 1);
 $project_list = ['Входящие', 'Учеба', 'Работа', 'Домашние дела', 'Авто'];
 $task_list = [
   0 => [
     'name' => 'Собеседование в IT компании',
-    'execute_date' => '01.12.2018',
+    'execute_date' => '21.09.2018',
     'category' => 'Работа',
     'status' => 'Нет',
   ],
   1 => [
     'name' => 'Выполнить тестовое задание',
-    'execute_date' => '25.12.2018',
+    'execute_date' => '20.09.2018',
     'category' => 'Работа',
     'status' => 'Нет',
   ],
   2 => [
     'name' => 'Сделать задание первого раздела',
-    'execute_date' => '21.12.2018',
+    'execute_date' => '20.09.2018',
     'category' => 'Учеба',
     'status' => 'Да',
   ],
@@ -33,6 +34,12 @@ $task_list = [
   ],
   5 => [
     'name' => 'Заказать пиццу',
+    'execute_date' => 'Нет',
+    'category' => 'Домашние дела',
+    'status' => 'Нет',
+  ],
+  6 => [
+    'name' => 'Межсайтовый скриптинг <script>console.log("123")</script>',
     'execute_date' => 'Нет',
     'category' => 'Домашние дела',
     'status' => 'Нет',
