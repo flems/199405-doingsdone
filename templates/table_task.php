@@ -1,8 +1,8 @@
 <table class="tasks">
   <?php foreach ($task_list as $key => $task): ?>
-    <?php if ($show_complete_tasks === 1 || $task['status'] === 'Нет'): ?>
+    <?php if ($show_complete_tasks === 1 || !$task['ready']): ?>
       <tr class="tasks__item task
-        <?php if($task['status'] === 'Да'):?>task--completed<?php endif;?>
+        <?php if($task['ready']):?>task--completed<?php endif;?>
         <?php if(checkDates($task['execute_date'])):?>task--important<?endif;?>
       ">
         <td class="task__select">
@@ -11,7 +11,13 @@
             <span class="checkbox__text"><?=htmlspecialchars($task['name'])?></span>
           </label>
         </td>
-        <td class="task__date"><?=$task['execute_date']?></td>
+        <td class="task__date">
+            <?php if($task['execute_date']):?>
+                <?=$task['execute_date']?>
+            <?else:?>
+                Нет
+            <?endif;?>
+        </td>
       </tr>
     <?php endif; ?>
   <?php endforeach; ?>

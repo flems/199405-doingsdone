@@ -16,11 +16,11 @@ function include_template($name, $data)
   return $result;
 }
 
-function countTask($task_list, $project_name)
+function countTask($task_list, $project_id)
 {
   $count = 0;
   foreach ($task_list as $key => $task) {
-    if ($task['category'] === $project_name) {
+    if ($task['project_id'] === $project_id) {
       $count++;
     }
   }
