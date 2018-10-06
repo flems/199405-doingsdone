@@ -8,43 +8,43 @@ INSERT INTO users
 SET email = 'user3@test', password = '123', name = 'user3';
 
 INSERT INTO projects
-SET user_id = 1, name = 'Входящие';
+SET user_id = 1, p_name = 'Входящие';
 
 INSERT INTO projects
-SET user_id = 1, name = 'Учеба';
+SET user_id = 1, p_name = 'Учеба';
 
 INSERT INTO projects
-SET user_id = 2, name = 'Учеба';
+SET user_id = 2, p_name = 'Учеба';
 
 INSERT INTO projects
-SET user_id = 1, name = 'Работа';
+SET user_id = 1, p_name = 'Работа';
 
 INSERT INTO projects
-SET user_id = 1, name = 'Домашние дела';
+SET user_id = 1, p_name = 'Домашние дела';
 
 INSERT INTO projects
-SET user_id = 1, name = 'Авто';
+SET user_id = 1, p_name = 'Авто';
 
 INSERT INTO tasks
-SET user_id = 1, project_id = '3', name = 'Собеседование в IT компании', ready = 0, execute_date = date("2018-08-10");
+SET user_id = 1, project_id = '4', name = 'Собеседование в IT компании', ready = 0, execute_date = date("2018-08-10"), create_date = CURDATE();
 
 INSERT INTO tasks
-SET user_id = 1, project_id = '6', name = 'Выполнить тестовое задание', ready = 0, execute_date = date("2018-09-24");
+SET user_id = 1, project_id = '2', name = 'Выполнить тестовое задание', ready = 0, execute_date = date("2018-09-24"), create_date = CURDATE();
 
 INSERT INTO tasks
-SET user_id = 2, project_id = '6', name = 'Выполнить тестовое задание', ready = 0, execute_date = date("2018-09-25");
+SET user_id = 2, project_id = '2', name = 'Выполнить тестовое задание', ready = 0, execute_date = date("2018-09-25"), create_date = CURDATE();
 
 INSERT INTO tasks
-SET user_id = 1, project_id = '6', name = 'Сделать задание первого раздела', ready = 0;
+SET user_id = 1, project_id = '2', name = 'Сделать задание первого раздела', ready = 0, create_date = CURDATE();
 
 INSERT INTO tasks
-SET user_id = 1, project_id = '1', name = 'Встреча с другом', ready = 0, execute_date = date("2018-09-30");
+SET user_id = 1, project_id = '1', name = 'Встреча с другом', ready = 0, execute_date = date("2018-09-30"), create_date = CURDATE();
 
 INSERT INTO tasks
-SET user_id = 1, project_id = '4', name = 'Купить корм для кота', ready = 0;
+SET user_id = 1, project_id = '5', name = 'Купить корм для кота', ready = 0, create_date = CURDATE();
 
 INSERT INTO tasks
-SET user_id = 1, project_id = '4', name = 'Заказать пиццу', ready = 0, execute_date = CURDATE();
+SET user_id = 1, project_id = '5', name = 'Заказать пиццу', ready = 0, execute_date = CURDATE(), create_date = CURDATE();
 
 -- получить список из всех проектов для одного пользователя;
 SELECT * FROM projects

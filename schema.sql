@@ -13,9 +13,12 @@ CREATE TABLE users (
 
 CREATE TABLE tasks (
   id INT AUTO_INCREMENT PRIMARY KEY,
+  create_date DATE,
+  name CHAR(255),
+  file_name CHAR(255),
+  file_url CHAR(255),
   user_id INT(5),
   project_id INT(5),
-  name CHAR(255),
   execute_date DATE,
   ready BIT
 );
