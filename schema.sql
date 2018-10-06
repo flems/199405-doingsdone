@@ -22,7 +22,7 @@ CREATE TABLE tasks (
 
 CREATE TABLE projects (
   id INT AUTO_INCREMENT PRIMARY KEY,
-  name CHAR(255),
+  p_name CHAR(255),
   user_id INT(5)
 );
 
