@@ -4,7 +4,9 @@
             <h2 class="content__header-text">Ошибка</h2>
         </header>
         <article class="gif-list">
-            <p class="error"><?= $error; ?></p>
+            <?php foreach ($error as $key => $value): ?>
+                <p class="error"><?=$key?>: <?=$value;?></p>
+            <?php endforeach; ?>
         </article>
     </div>
 </main>

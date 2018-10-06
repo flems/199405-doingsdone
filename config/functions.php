@@ -27,6 +27,7 @@ function countTask($task_list, $project_id)
   return $count;
 }
 
+//проверяет просроченная ли задача
 function checkDates($date)
 {
   $result = false;
@@ -42,4 +43,15 @@ function checkDates($date)
   }
 
   return $result;
+}
+
+//функция запроса к бд
+function getInfo($link, $sql, $user_id){
+    if (!$res = mysqli_query($link, $sql)) {
+        // $error['project_list'] = mysqli_error($link);
+        $dataArray['error'] = mysqli_error($link);
+    } else {
+        $dataArray['result'] = mysqli_fetch_all($res, MYSQLI_ASSOC);
+    }
+    return $dataArray;
 }
