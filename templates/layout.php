@@ -42,7 +42,16 @@
 
                 <nav class="main-navigation">
                     <ul class="main-navigation__list">
-                        <?=include_template('project_list.php', ['project_list' => $project_list, 'task_list' => $task_list, 'all_tasks' => $all_tasks])?>
+                        <?php
+                        if(isset($project_list)){
+                            $project_list = include_template('project_list.php', [
+                                'project_list' => $project_list,
+                                'task_list' => $task_list,
+                                'all_tasks' => $all_tasks
+                            ]);
+                            print($project_list);
+                        }
+                        ?>
                     </ul>
                 </nav>
 
