@@ -3,8 +3,13 @@ error_reporting(E_ALL);
 require_once($_SERVER['DOCUMENT_ROOT'].'/config/init.php');
 
 if (!$link) {
-    $error = mysqli_connect_error();
+    $error['error_connect'] = mysqli_connect_error();
     $page_content = include_template('error.php', ['error' => $error]);
+    $page = include_template('layout.php', [
+        'page_content' => $page_content,
+        'page_title' => "Дела в порядке",
+      ]
+    );
 } else {
     $project_id = $_GET['project'] ?? '';
 

@@ -1,7 +1,7 @@
 <?
 $db = [
     'host' => 'localhost',
-    'user' => 'root',
+    'user' => 'root1',
     'password' => '',
     'database' => 'doingsdone',
 ];
