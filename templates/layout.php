@@ -9,11 +9,11 @@
     <link rel="stylesheet" href="css/flatpickr.min.css">
 </head>
 
-<body>
+<body <?php if($guest):?>class="body-background"<?endif;?>>
 <h1 class="visually-hidden">Дела в порядке</h1>
 
 <div class="page-wrapper">
-    <div class="container container--with-sidebar">
+    <div class="container <?php if(!$guest):?>container--with-sidebar<?endif;?>">
         <header class="main-header">
             <a href="/">
                 <img src="img/logo.png" width="153" height="42" alt="Логотип Дела в порядке">
@@ -27,41 +27,43 @@
                             <img src="img/user-pic.jpg" width="40" height="40" alt="Пользователь">
                         </div>
                         <div class="user-menu__data">
-                            <p>Константин</p>
+                            <p><?=$user['name']?></p>
 
-                            <a href="#">Выйти</a>
+                            <a href="/logout.php">Выйти</a>
                         </div>
                     </div>
                 <?else:?>
-                    <a class="main-header__side-item button button--transparent" href="form-authorization.html">Войти</a>
+                    <a class="main-header__side-item button button--transparent" href="auth.php">Войти</a>
                 <?endif;?>
             </div>
         </header>
 
         <div class="content">
-            <section class="content__side">
-                <?php if($user_id != ''):?>
-                    <h2 class="content__side-heading">Проекты</h2>
-                    <nav class="main-navigation">
-                        <ul class="main-navigation__list">
-                            <?php
-                            if(isset($project_list)){
-                                $project_list = include_template('project_list.php', [
-                                    'project_list' => $project_list,
-                                    'all_tasks' => $all_tasks
-                                ]);
-                                print($project_list);
-                            }
-                            ?>
-                        </ul>
-                    </nav>
-                    <a class="button button--transparent button--plus content__side-button"
-                       href="pages/form-project.html" target="project_add">Добавить проект</a>
-               <?else:?>
-                   <p class="content__side-info">Если у вас уже есть аккаунт, авторизуйтесь на сайте</p>
-                   <a class="button button--transparent content__side-button" href="form-authorization.html">Войти</a>
-               <?endif;?>
-            </section>
+            <?php if(!$guest):?>
+                <section class="content__side">
+                    <?php if($user_id != ''):?>
+                        <h2 class="content__side-heading">Проекты</h2>
+                        <nav class="main-navigation">
+                            <ul class="main-navigation__list">
+                                <?php
+                                if(isset($project_list)){
+                                    $project_list = include_template('project_list.php', [
+                                        'project_list' => $project_list,
+                                        'all_tasks' => $all_tasks
+                                    ]);
+                                    print($project_list);
+                                }
+                                ?>
+                            </ul>
+                        </nav>
+                        <a class="button button--transparent button--plus content__side-button"
+                           href="pages/form-project.html" target="project_add">Добавить проект</a>
+                   <?else:?>
+                       <p class="content__side-info">Если у вас уже есть аккаунт, авторизуйтесь на сайте</p>
+                       <a class="button button--transparent content__side-button" href="auth.php">Войти</a>
+                   <?endif;?>
+                </section>
+            <?endif;?>
 
             <main class="content__main">
               <?=$page_content?>

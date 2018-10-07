@@ -158,3 +158,43 @@ function addUser($formData, $link) {
     }
     return $result;
 }
+
+//функция валидации формы авторизации
+function validateAuthForm ($formData, $required_fields, $link){
+    $result = [];
+    $email = mysqli_real_escape_string($link, $formData['email']);
+    $sql = "SELECT * FROM users WHERE email = '$email'";
+    $res = mysqli_query($link, $sql);
+
+    //проверяем обязательный поля на заполненность
+    foreach ($required_fields as $field) {
+        if(empty($formData[$field])) {
+            $result['errors'][$field] = 'Поле не заполнено';
+        }
+    }
+    //проверяем на корректность email
+    if(!isset($result['errors']['email']) && !filter_var($formData['email'], FILTER_VALIDATE_EMAIL)){
+        $result['errors']['email'] = 'E-mail введён некорректно';
+    }
+
+    //проверяем существование пользователя с таким email в бд
+    if(!isset($result['errors']['email'])){
+        if (mysqli_num_rows($res) == 0) {
+            $result['errors']['email'] = 'Пользователь с таким e-mail не зарегистрирован';
+        }
+    }
+
+    //проверяем подходит ли пароль
+    if(!isset($result['errors']['email']) && !isset($result['errors']['password'])){
+        //проверяем пароль
+        $user = $res ? mysqli_fetch_array($res, MYSQLI_ASSOC) : null;
+        if(!password_verify($formData['password'], $user['password'])) {
+            $result['errors']['password'] = 'Неверный пароль';
+        }
+    }
+    //если ошибок нет возвращаем id user
+    if(!isset($result['errors'])) {
+        $result['user'] = $user;
+    }
+    return $result;
+}
