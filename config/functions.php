@@ -46,7 +46,7 @@ function checkDates($date)
 }
 
 //функция запроса к бд
-function getInfo($link, $sql, $user_id){
+function getInfo($link, $sql, $user_id = '') {
     if (!$res = mysqli_query($link, $sql)) {
         // $error['project_list'] = mysqli_error($link);
         $dataArray['error'] = mysqli_error($link);
@@ -58,6 +58,7 @@ function getInfo($link, $sql, $user_id){
 
 //Добавление новой задачи в бд
 function addTask($formData, $file, $user_id, $link) {
+    $result = [];
     $form_project = $formData['project'];
     $form_name = $formData['name'];
     $form_date = $formData['date'];
@@ -74,15 +75,18 @@ function addTask($formData, $file, $user_id, $link) {
         $filne_name = uniqid() . $file_type;
         $file_path = $_SERVER['DOCUMENT_ROOT'] . '/uploads/';
         $file_url = '/uploads/' . $filne_name;
+        if(!file_exists($file_path)) {
+            mkdir($file_path, 0777);
+        }
         move_uploaded_file($file['tmp_name'], $file_path . $filne_name);
         $sql .= ", `file_name` = '$original_name', `file_url` = '$file_url'";
     }
 
     if (!$res = mysqli_query($link, $sql)) {
-        $error['add_task'] = mysqli_error($link);
-    } else {
-        header("Location: /");
+        $result['error'] = mysqli_error($link);
     }
+    return $result;
+
 }
 //проверка даты
 function validateDate($date, $format = 'Y-m-d') {
@@ -112,4 +116,45 @@ function validateForm ($formData, $required_fields, $project_list){
         }
     }
     return $errors;
+}
+//Валидация формы регистрации
+function validateRegistrForm ($formData, $required_fields, $link){
+    $errors = [];
+    //проверяем обязательный поля на заполненность
+    foreach ($required_fields as $field) {
+        if(empty($formData[$field])) {
+            $errors[$field] = 'Поле не заполнено';
+        }
+    }
+
+    //проверяем на существование пользователя с таким email
+    if(!isset($errors['email'])){
+        $email = mysqli_real_escape_string($link, $formData['email']);
+        $sql = "SELECT id FROM users WHERE email = '$email'";
+        $res = mysqli_query($link, $sql);
+        if (mysqli_num_rows($res) > 0) {
+            $errors['email'] = 'Пользователь с таким e-mail уже зарегистрирован';
+        }
+    }
+    //проверяем на корректность email
+    if(!isset($errors['email']) && !filter_var($formData['email'], FILTER_VALIDATE_EMAIL)){
+        $errors['email'] = 'E-mail введён некорректно';
+    }
+
+    return $errors;
+}
+//добавление нового пользователя в бд
+function addUser($formData, $link) {
+    $result = [];
+    $user_email = $formData['email'];
+    $user_name = $formData['name'];
+    $user_password = password_hash($formData['password'], PASSWORD_DEFAULT);
+
+
+    $sql = "INSERT INTO users SET `email` = '$user_email', `password` = '$user_password', `name` = '$user_name'";
+
+    if (!$res = mysqli_query($link, $sql)) {
+        $result['error'] = mysqli_error($link);
+    }
+    return $result;
 }

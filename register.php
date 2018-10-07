@@ -8,7 +8,6 @@ if (!$link) {
     $page = include_template('layout.php', [
         'page_content' => $page_content,
         'page_title' => "Дела в порядке",
-        'user_id' => $user_id,
       ]
     );
 } else {
@@ -16,26 +15,15 @@ if (!$link) {
     $formData = [];
     $form_errors = [];
 
-    //получаем список проектов
-    $sql = "SELECT `id`, `p_name`, `user_id` FROM projects WHERE `user_id` = '$user_id'";
-    $projects_array = getInfo($link, $sql, $user_id);
-    isset($projects_array['error']) ? $error['project_list'] = mysqli_error($link) : $project_list = $projects_array['result'];
-
-    //получаем список задач c учетом id пользователя
-    $sql = "SELECT * FROM tasks WHERE `user_id` = '$user_id'";
-    $all_tasks_array = getInfo($link, $sql, $user_id);
-    isset($all_tasks_array['error']) ? $error['all_tasks'] = mysqli_error($link) : $all_tasks = $all_tasks_array['result'];
-
     //обрабатываем данные с формы
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-        $formData = $_POST['project'];
-        $required_fields = ['name', 'project'];
-        $form_errors = validateForm($_POST['project'], $required_fields, $project_list);
+        $formData = $_POST['user'];
+        $required_fields = ['name', 'email', 'password'];
+        $form_errors = validateRegistrForm($formData, $required_fields, $link);
         if(empty($form_errors)) {
-            // addTask($_POST['project'], $_FILES['preview'], $user_id, $link);
-            $result = addTask($_POST['project'], $_FILES['preview'], $user_id, $link);
+            $result = addUser($formData, $link);
             if(isset($result['error'])){
-                $error['add_task'] = $result['error'];
+                $error['add_user'] = $result['error'];
             } else {
                 header("Location: /");
             }
@@ -47,13 +35,12 @@ if (!$link) {
         $page_content = include_template('error.php', ['error' => $error]);
         $page = include_template('layout.php', [
             'page_content' => $page_content,
-            'user_id' => $user_id,
             'page_title' => "Дела в порядке",
+            'user_id' => $user_id,
           ]
         );
     } else {
-        $page_content = include_template('add.php', [
-            'project_list' => $project_list,
+        $page_content = include_template('register.php', [
             'formData' => $formData,
             'form_errors' => $form_errors,
         ]);

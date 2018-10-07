@@ -9,7 +9,10 @@ if($link) {
 
 $project_list = [];
 $task_list = [];
+$all_tasks = [];
 $show_complete_tasks = 1;
 $page_content = '';
+$user_id = '';
 $user_id = 1;
+
 ?>

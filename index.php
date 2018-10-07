@@ -51,6 +51,7 @@ if (!$link) {
             'task_list' => $task_list,
             'all_tasks' => $all_tasks,
             'show_complete_tasks' => $show_complete_tasks,
+            'user_id' => $user_id,
           ]
         );
     }

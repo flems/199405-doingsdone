@@ -20,42 +20,47 @@
             </a>
 
             <div class="main-header__side">
-                <a class="main-header__side-item button button--plus open-modal" href="add.php">Добавить задачу</a>
+                <?php if($user_id != ''):?>
+                    <a class="main-header__side-item button button--plus open-modal" href="/add.php">Добавить задачу</a>
+                    <div class="main-header__side-item user-menu">
+                        <div class="user-menu__image">
+                            <img src="img/user-pic.jpg" width="40" height="40" alt="Пользователь">
+                        </div>
+                        <div class="user-menu__data">
+                            <p>Константин</p>
 
-                <div class="main-header__side-item user-menu">
-                    <div class="user-menu__image">
-                        <img src="img/user-pic.jpg" width="40" height="40" alt="Пользователь">
+                            <a href="#">Выйти</a>
+                        </div>
                     </div>
-
-                    <div class="user-menu__data">
-                        <p>Константин</p>
-
-                        <a href="#">Выйти</a>
-                    </div>
-                </div>
+                <?else:?>
+                    <a class="main-header__side-item button button--transparent" href="form-authorization.html">Войти</a>
+                <?endif;?>
             </div>
         </header>
 
         <div class="content">
             <section class="content__side">
-                <h2 class="content__side-heading">Проекты</h2>
-
-                <nav class="main-navigation">
-                    <ul class="main-navigation__list">
-                        <?php
-                        if(isset($project_list)){
-                            $project_list = include_template('project_list.php', [
-                                'project_list' => $project_list,
-                                'all_tasks' => $all_tasks
-                            ]);
-                            print($project_list);
-                        }
-                        ?>
-                    </ul>
-                </nav>
-
-                <a class="button button--transparent button--plus content__side-button"
-                   href="pages/form-project.html" target="project_add">Добавить проект</a>
+                <?php if($user_id != ''):?>
+                    <h2 class="content__side-heading">Проекты</h2>
+                    <nav class="main-navigation">
+                        <ul class="main-navigation__list">
+                            <?php
+                            if(isset($project_list)){
+                                $project_list = include_template('project_list.php', [
+                                    'project_list' => $project_list,
+                                    'all_tasks' => $all_tasks
+                                ]);
+                                print($project_list);
+                            }
+                            ?>
+                        </ul>
+                    </nav>
+                    <a class="button button--transparent button--plus content__side-button"
+                       href="pages/form-project.html" target="project_add">Добавить проект</a>
+               <?else:?>
+                   <p class="content__side-info">Если у вас уже есть аккаунт, авторизуйтесь на сайте</p>
+                   <a class="button button--transparent content__side-button" href="form-authorization.html">Войти</a>
+               <?endif;?>
             </section>
 
             <main class="content__main">
@@ -73,7 +78,9 @@
             <p>Веб-приложение для удобного ведения списка дел.</p>
         </div>
 
-        <a class="main-footer__button button button--plus" href="pages/form-task.html">Добавить задачу</a>
+        <?php if($user_id != ''):?>
+            <a class="main-footer__button button button--plus" href="/add.php">Добавить задачу</a>
+        <?endif;?>
 
         <div class="main-footer__social social">
             <span class="visually-hidden">Мы в соцсетях:</span>
