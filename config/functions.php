@@ -55,3 +55,61 @@ function getInfo($link, $sql, $user_id){
     }
     return $dataArray;
 }
+
+//Добавление новой задачи в бд
+function addTask($formData, $file, $user_id, $link) {
+    $form_project = $formData['project'];
+    $form_name = $formData['name'];
+    $form_date = $formData['date'];
+
+    $sql = "INSERT INTO tasks SET "
+    . "`user_id` = '$user_id', `project_id` = '$form_project', `name` = '$form_name', `ready` = 0, `create_date` = CURDATE()";
+    if($form_date != '') {
+        $sql .= ", execute_date = date('$form_date')";
+    }
+    if($file['error'] == 0) {
+        $original_name = $file['name'];
+        $place = strripos($original_name, '.');
+        $file_type = substr($original_name, $place);
+        $filne_name = uniqid() . $file_type;
+        $file_path = $_SERVER['DOCUMENT_ROOT'] . '/uploads/';
+        $file_url = '/uploads/' . $filne_name;
+        move_uploaded_file($file['tmp_name'], $file_path . $filne_name);
+        $sql .= ", `file_name` = '$original_name', `file_url` = '$file_url'";
+    }
+
+    if (!$res = mysqli_query($link, $sql)) {
+        $error['add_task'] = mysqli_error($link);
+    } else {
+        header("Location: /");
+    }
+}
+//проверка даты
+function validateDate($date, $format = 'Y-m-d') {
+    $d = DateTime::createFromFormat($format, $date);
+    return $d && $d->format($format) == $date;
+}
+//Валидация формы добавления новой задачи
+function validateForm ($formData, $required_fields, $project_list){
+    $errors = [];
+    //проверяем обязательный поля на заполненность
+    foreach ($required_fields as $field) {
+        if(empty($formData[$field])) {
+            $errors[$field] = 'Поле не заполнено';
+        }
+    }
+    //проверяем существование проекта в бд
+    foreach ($project_list as $project) {
+        $projects[] = $project['id'];
+    }
+    if(!in_array($formData['project'], $projects)){
+        $errors['project'] = 'Данного проекта не существует';
+    }
+    //проверка даты
+    if(!empty($formData['date'])){
+        if(!validateDate($formData['date'])){
+            $errors['date'] = 'Неверный формат даты';
+        }
+    }
+    return $errors;
+}

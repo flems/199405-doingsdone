@@ -11,6 +11,13 @@
             <span class="checkbox__text"><?=htmlspecialchars($task['name'])?></span>
           </label>
         </td>
+
+        <td class="task__file">
+            <?if($task['file_url']):?>
+                <a class="download-link" href="<?=$task['file_url']?>"><?=$task['file_name']?></a>
+            <?endif;?>
+        </td>
+
         <td class="task__date">
             <?php if($task['execute_date']):?>
                 <?=$task['execute_date']?>
