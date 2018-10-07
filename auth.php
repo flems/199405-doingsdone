@@ -23,16 +23,13 @@ if (!$link) {
 
     //обрабатываем данные с формы
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-        $formData = $_POST['user'];
-        $required_fields = ['name', 'email', 'password'];
-        $form_errors = validateRegistrForm($formData, $required_fields, $link);
-        if(empty($form_errors)) {
-            $result = addUser($formData, $link);
-            if(isset($result['error'])){
-                $error['add_user'] = $result['error'];
-            } else {
-                header("Location: /");
-            }
+        $formData = $_POST['auth'];
+        $required_fields = ['email', 'password'];
+        $result = validateAuthForm($formData, $required_fields, $link);
+        $form_errors = $result['errors'] ?? '';
+        if ($form_errors === '') {
+            $_SESSION['user'] = $result['user'];
+            header("Location: /");
         }
     }
 
@@ -43,10 +40,11 @@ if (!$link) {
             'page_content' => $page_content,
             'page_title' => "Дела в порядке",
             'user_id' => $user_id,
+            'user' => $user,
           ]
         );
     } else {
-        $page_content = include_template('register.php', [
+        $page_content = include_template('auth.php', [
             'formData' => $formData,
             'form_errors' => $form_errors,
         ]);
@@ -57,14 +55,12 @@ if (!$link) {
             'all_tasks' => $all_tasks,
             'user_id' => $user_id,
             'guest' => $guest,
+            'user' => $user,
           ]
         );
     }
-
-
-
-
-
 }
+
+
 
 print_r($page);
