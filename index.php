@@ -18,6 +18,24 @@ if (!$link) {
       ]
     );
 } else {
+
+
+    //Обновление статуса задачи
+    if (isset($_GET['task_id']) && isset($_GET['task_id'])) {
+
+        $data['task_id'] = $_GET['task_id'];
+        $data['task_ready'] = $_GET['check'];
+
+        $result = updateTask($data, $user_id, $link);
+        if(isset($result['error'])){
+            $error['update_task'] = $result['error'];
+        } else {
+            header("Location: /");
+        }
+    }
+
+    //Фильтры задач
+    $filter = $_GET['filter'] ?? '';
     $project_id = $_GET['project'] ?? '';
 
     //получаем список проектов
@@ -25,15 +43,28 @@ if (!$link) {
     $projects_array = getInfo($link, $sql, $user_id);
     isset($projects_array['error']) ? $error['project_list'] = mysqli_error($link) : $project_list = $projects_array['result'];
 
-    //получаем список задач c учетом id пользователя
+    //получаем список всех задач c учетом id пользователя
     $sql = "SELECT * FROM tasks WHERE `user_id` = '$user_id'";
     $all_tasks_array = getInfo($link, $sql, $user_id);
     isset($all_tasks_array['error']) ? $error['all_tasks'] = mysqli_error($link) : $all_tasks = $all_tasks_array['result'];
 
-    //список задач для пользователя с учетом id проекта
+    //список задач для пользователя с учетом id проекта и учетом фильтра по дате
     $sql = "SELECT * FROM tasks WHERE `user_id` = '$user_id'";
     if (isset($_GET['project'])) {
-       $sql .= "&& `project_id` = '$project_id'";
+      $sql .= "&& `project_id` = '$project_id'";
+    }
+    if (isset($_GET['filter'])) {
+       switch ($filter) {
+        case 'today':
+          $sql .= "&& `execute_date` = CURDATE()";
+          break;
+        case 'tomorrow':
+          $sql .= "&& `execute_date` = CURDATE() + INTERVAL 1 DAY";
+          break;
+        case 'expired':
+          $sql .= "&& `execute_date` < CURDATE()";
+          break;
+      }
     }
     $task_list_array = getInfo($link, $sql, $user_id);
     isset($task_list_array['error']) ? $error['task_list'] = mysqli_error($link) : $task_list = $task_list_array['result'];
@@ -44,6 +75,9 @@ if (!$link) {
         $page = include_template('layout.php', [
             'page_content' => $page_content,
             'page_title' => "Дела в порядке",
+            'guest' => $guest,
+            'user_id' => $user_id,
+            'user' => $user,
           ]
         );
     } else {

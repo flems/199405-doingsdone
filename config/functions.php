@@ -198,3 +198,59 @@ function validateAuthForm ($formData, $required_fields, $link){
     }
     return $result;
 }
+
+
+//Валидация формы добавления проекта
+function validateFormAddProject ($formData, $required_fields, $project_list){
+    $errors = [];
+    //проверяем обязательный поля на заполненность
+    foreach ($required_fields as $field) {
+        if(empty($formData[$field])) {
+            $errors[$field] = 'Поле не заполнено';
+        }
+    }
+    if(!isset($errors['project'])) {
+      //проверяем существование проекта в бд
+      foreach ($project_list as $project) {
+        $projects[] = $project['p_name'];
+      }
+      if(in_array($formData['name'], $projects)){
+        $errors['name'] = 'Проект с таким названием уже существует';
+      }
+    }
+
+    return $errors;
+}
+
+
+
+//Добавление новой задачи в бд
+function addProject($formData, $user_id, $link) {
+    $result = [];
+    $form_name = $formData['name'];
+
+    $sql = "INSERT INTO projects SET "
+    . "`user_id` = '$user_id', `p_name` = '$form_name'";
+
+    if (!$res = mysqli_query($link, $sql)) {
+        $result['error'] = mysqli_error($link);
+    }
+    return $result;
+
+}
+
+
+//Обновление статуса задачи
+function updateTask($data, $user_id, $link) {
+    $result = [];
+    $task_id = $data['task_id'];
+    $task_ready = $data['task_ready'];
+
+    $sql = "UPDATE `tasks` SET `ready` = $task_ready WHERE id = $task_id";
+
+    if (!$res = mysqli_query($link, $sql)) {
+        $result['error'] = mysqli_error($link);
+    }
+    return $result;
+
+}
