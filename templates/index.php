@@ -7,10 +7,10 @@
 
 <div class="tasks-controls">
   <nav class="tasks-switch">
-    <a href="/" class="tasks-switch__item tasks-switch__item--active">Все задачи</a>
-    <a href="/" class="tasks-switch__item">Повестка дня</a>
-    <a href="/" class="tasks-switch__item">Завтра</a>
-    <a href="/" class="tasks-switch__item">Просроченные</a>
+    <a href="/<?if(isset($_GET['project'])):?>?project=<?=$_GET['project']?><?endif;?>" class="tasks-switch__item tasks-switch__item--active">Все задачи</a>
+    <a href="/?<?if(isset($_GET['project'])):?>project=<?=$_GET['project']?>&<?endif;?>filter=today" class="tasks-switch__item">Повестка дня</a>
+    <a href="/?<?if(isset($_GET['project'])):?>project=<?=$_GET['project']?>&<?endif;?>filter=tomorrow" class="tasks-switch__item">Завтра</a>
+    <a href="/?<?if(isset($_GET['project'])):?>project=<?=$_GET['project']?>&<?endif;?>filter=expired" class="tasks-switch__item">Просроченные</a>
   </nav>
 
   <label class="checkbox">

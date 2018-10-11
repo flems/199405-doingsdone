@@ -7,7 +7,7 @@
       ">
         <td class="task__select">
           <label class="checkbox task__checkbox">
-            <input class="checkbox__input visually-hidden task__checkbox" type="checkbox" value="1">
+            <input class="checkbox__input visually-hidden task__checkbox" type="checkbox" value="<?=$task['id']?>" <?php if($task['ready']):?>checked<?php endif;?>>
             <span class="checkbox__text"><?=htmlspecialchars($task['name'])?></span>
           </label>
         </td>
