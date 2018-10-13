@@ -103,11 +103,13 @@ function validateForm ($formData, $required_fields, $project_list){
         }
     }
     //проверяем существование проекта в бд
-    foreach ($project_list as $project) {
+    if (!empty($project_list)) {
+      foreach ($project_list as $project) {
         $projects[] = $project['id'];
-    }
-    if(!in_array($formData['project'], $projects)){
+      }
+      if(!in_array($formData['project'], $projects)){
         $errors['project'] = 'Данного проекта не существует';
+      }
     }
     //проверка даты
     if(!empty($formData['date'])){
@@ -209,7 +211,7 @@ function validateFormAddProject ($formData, $required_fields, $project_list){
             $errors[$field] = 'Поле не заполнено';
         }
     }
-    if(!isset($errors['project'])) {
+    if(!isset($errors['project']) && !empty($project_list)) {
       //проверяем существование проекта в бд
       foreach ($project_list as $project) {
         $projects[] = $project['p_name'];
