@@ -25,7 +25,7 @@ if (!$link) {
 
 
 //Обновление статуса задачи
-if (isset($_GET['task_id']) && isset($_GET['task_id'])) {
+if (isset($_GET['task_id']) && $_GET['task_id']) {
 
     $data['task_id'] = $_GET['task_id'];
     $data['task_ready'] = $_GET['check'];
