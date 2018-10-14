@@ -59,9 +59,9 @@ function getInfo($link, $sql, $user_id = '') {
 //Добавление новой задачи в бд
 function addTask($formData, $file, $user_id, $link) {
     $result = [];
-    $form_project = $formData['project'];
-    $form_name = $formData['name'];
-    $form_date = $formData['date'];
+    $form_project = mysqli_real_escape_string($link, $formData['project']);
+    $form_name = mysqli_real_escape_string($link, $formData['name']);
+    $form_date = mysqli_real_escape_string($link, $formData['date']);
 
     $sql = "INSERT INTO tasks SET "
     . "`user_id` = '$user_id', `project_id` = '$form_project', `name` = '$form_name', `ready` = 0, `create_date` = CURDATE()";
@@ -103,11 +103,13 @@ function validateForm ($formData, $required_fields, $project_list){
         }
     }
     //проверяем существование проекта в бд
-    foreach ($project_list as $project) {
+    if (!empty($project_list)) {
+      foreach ($project_list as $project) {
         $projects[] = $project['id'];
-    }
-    if(!in_array($formData['project'], $projects)){
+      }
+      if(!in_array($formData['project'], $projects)){
         $errors['project'] = 'Данного проекта не существует';
+      }
     }
     //проверка даты
     if(!empty($formData['date'])){
@@ -146,10 +148,9 @@ function validateRegistrForm ($formData, $required_fields, $link){
 //добавление нового пользователя в бд
 function addUser($formData, $link) {
     $result = [];
-    $user_email = $formData['email'];
-    $user_name = $formData['name'];
+    $user_email = mysqli_real_escape_string($link, $formData['email']);
+    $user_name = mysqli_real_escape_string($link, $formData['name']);
     $user_password = password_hash($formData['password'], PASSWORD_DEFAULT);
-
 
     $sql = "INSERT INTO users SET `email` = '$user_email', `password` = '$user_password', `name` = '$user_name'";
 
@@ -209,7 +210,7 @@ function validateFormAddProject ($formData, $required_fields, $project_list){
             $errors[$field] = 'Поле не заполнено';
         }
     }
-    if(!isset($errors['project'])) {
+    if(!isset($errors['project']) && !empty($project_list)) {
       //проверяем существование проекта в бд
       foreach ($project_list as $project) {
         $projects[] = $project['p_name'];
@@ -227,7 +228,7 @@ function validateFormAddProject ($formData, $required_fields, $project_list){
 //Добавление новой задачи в бд
 function addProject($formData, $user_id, $link) {
     $result = [];
-    $form_name = $formData['name'];
+    $form_name = mysqli_real_escape_string($link, $formData['name']);
 
     $sql = "INSERT INTO projects SET "
     . "`user_id` = '$user_id', `p_name` = '$form_name'";
@@ -243,8 +244,8 @@ function addProject($formData, $user_id, $link) {
 //Обновление статуса задачи
 function updateTask($data, $user_id, $link) {
     $result = [];
-    $task_id = $data['task_id'];
-    $task_ready = $data['task_ready'];
+    $task_id = mysqli_real_escape_string($link, $data['task_id']);
+    $task_ready = mysqli_real_escape_string($link, $data['task_ready']);
 
     $sql = "UPDATE `tasks` SET `ready` = $task_ready WHERE id = $task_id";
 
