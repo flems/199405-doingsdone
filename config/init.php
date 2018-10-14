@@ -11,7 +11,7 @@ if($link) {
 $project_list = [];
 $task_list = [];
 $all_tasks = [];
-$show_complete_tasks = 1;
+$show_complete_tasks = 0;
 $page_content = '';
 $user_id = '';
 // $user_id = 1;
@@ -20,6 +20,7 @@ $user = [];
 if(isset($_SESSION['user'])) {
     $user_id = $_SESSION['user']['id'];
     $user = $_SESSION['user'];
+    $show_complete_tasks = $_SESSION['user']['show_completed'];
 }
 
 ?>

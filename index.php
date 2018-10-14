@@ -38,6 +38,20 @@ if (isset($_GET['task_id']) && $_GET['task_id']) {
     }
 }
 
+//показывать выполненные
+if (isset($_GET['show_completed']) && $_GET['show_completed'] != '') {
+    $data['show_completed'] = $_GET['show_completed'];
+    $result = updateShowTask($data, $user_id, $link);
+    if(isset($result['error'])){
+        $error['update_show_completed'] = $result['error'];
+    } else {
+        if (isset($_SESSION['user'])) {
+            $_SESSION['user']['show_completed'] = $_GET['show_completed'];
+        }
+        header("Location: /");
+    }
+}
+
 //Фильтры задач
 $filter = $_GET['filter'] ?? '';
 $project_id = $_GET['project'] ?? '';
@@ -79,9 +93,13 @@ if(isset($error)) {
     $page = include_template('layout.php', [
         'page_content' => $page_content,
         'page_title' => "Дела в порядке",
-        'guest' => $guest,
+        'project_list' => $project_list,
+        'task_list' => $task_list,
+        'all_tasks' => $all_tasks,
+        'show_complete_tasks' => $show_complete_tasks,
         'user_id' => $user_id,
         'user' => $user,
+        'guest' => $guest,
       ]
     );
 } else {

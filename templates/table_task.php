@@ -1,6 +1,6 @@
 <table class="tasks">
   <?php foreach ($task_list as $key => $task): ?>
-    <?php if ($show_complete_tasks === 1 || !$task['ready']): ?>
+    <?php if (intval($show_complete_tasks) === 1 || !$task['ready']): ?>
       <tr class="tasks__item task
         <?php if($task['ready']):?>task--completed<?php endif;?>
         <?php if(checkDates($task['execute_date'])):?>task--important<?endif;?>

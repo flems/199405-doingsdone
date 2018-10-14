@@ -12,7 +12,6 @@
     <a href="/?<?if(isset($_GET['project'])):?>project=<?=$_GET['project']?>&<?endif;?>filter=tomorrow" class="tasks-switch__item">Завтра</a>
     <a href="/?<?if(isset($_GET['project'])):?>project=<?=$_GET['project']?>&<?endif;?>filter=expired" class="tasks-switch__item">Просроченные</a>
   </nav>
-
   <label class="checkbox">
     <input class="checkbox__input visually-hidden show_completed"
       <?php if ($show_complete_tasks): ?>checked<?php endif; ?>

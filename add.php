@@ -40,7 +40,7 @@ isset($all_tasks_array['error']) ? $error['all_tasks'] = mysqli_error($link) : $
 //обрабатываем данные с формы
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $formData = $_POST['project'];
-    $required_fields = ['name', 'project'];
+    $required_fields = ['name'];
     $form_errors = validateForm($_POST['project'], $required_fields, $project_list);
     if(empty($form_errors)) {
         // addTask($_POST['project'], $_FILES['preview'], $user_id, $link);
@@ -61,6 +61,9 @@ if(isset($error)) {
         'user_id' => $user_id,
         'user' => $user,
         'page_title' => "Дела в порядке",
+        'show_complete_tasks' => $show_complete_tasks,
+        'user_id' => $user_id,
+        'guest' => $guest,
       ]
     );
 } else {

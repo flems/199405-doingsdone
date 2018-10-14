@@ -59,15 +59,21 @@ function getInfo($link, $sql, $user_id = '') {
 //Добавление новой задачи в бд
 function addTask($formData, $file, $user_id, $link) {
     $result = [];
-    $form_project = mysqli_real_escape_string($link, $formData['project']);
+    $form_project = $formData['project'] ?? '';
+    $form_project = mysqli_real_escape_string($link, $form_project);
+
     $form_name = mysqli_real_escape_string($link, $formData['name']);
     $form_date = mysqli_real_escape_string($link, $formData['date']);
 
     $sql = "INSERT INTO tasks SET "
-    . "`user_id` = '$user_id', `project_id` = '$form_project', `name` = '$form_name', `ready` = 0, `create_date` = CURDATE()";
+    . "`user_id` = '$user_id', `name` = '$form_name', `ready` = 0, `create_date` = CURDATE()";
     if($form_date != '') {
         $sql .= ", execute_date = date('$form_date')";
     }
+    if($form_project != '') {
+        $sql .= ", `project_id` = '$form_project'";
+    }
+
     if($file['error'] == 0) {
         $original_name = $file['name'];
         $place = strripos($original_name, '.');
@@ -103,7 +109,7 @@ function validateForm ($formData, $required_fields, $project_list){
         }
     }
     //проверяем существование проекта в бд
-    if (!empty($project_list)) {
+    if (!empty($project_list) && isset($formData['project'])) {
       foreach ($project_list as $project) {
         $projects[] = $project['id'];
       }
@@ -152,7 +158,7 @@ function addUser($formData, $link) {
     $user_name = mysqli_real_escape_string($link, $formData['name']);
     $user_password = password_hash($formData['password'], PASSWORD_DEFAULT);
 
-    $sql = "INSERT INTO users SET `email` = '$user_email', `password` = '$user_password', `name` = '$user_name'";
+    $sql = "INSERT INTO users SET `email` = '$user_email', `password` = '$user_password', `name` = '$user_name', show_completed = 0";
 
     if (!$res = mysqli_query($link, $sql)) {
         $result['error'] = mysqli_error($link);
@@ -253,5 +259,17 @@ function updateTask($data, $user_id, $link) {
         $result['error'] = mysqli_error($link);
     }
     return $result;
+}
 
+//Обновление показава выполенныех задач
+function updateShowTask($data, $user_id, $link) {
+    $result = [];
+    $show_completed = mysqli_real_escape_string($link, $data['show_completed']);
+
+    $sql = "UPDATE `users` SET `show_completed` = $show_completed WHERE id = $user_id";
+
+    if (!$res = mysqli_query($link, $sql)) {
+        $result['error'] = mysqli_error($link);
+    }
+    return $result;
 }

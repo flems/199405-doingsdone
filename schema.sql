@@ -8,7 +8,8 @@ CREATE TABLE users (
   id INT AUTO_INCREMENT PRIMARY KEY,
   email CHAR(128),
   password CHAR(255),
-  name CHAR(128)
+  name CHAR(128),
+  show_completed BIT
 );
 
 CREATE TABLE tasks (
